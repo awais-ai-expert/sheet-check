@@ -27,6 +27,8 @@ jobs:
       - name: Check out repo
 
         uses: actions/checkout@v4
+        with:
+    fetch-depth: 0
 
       - name: Set up Python
 
@@ -52,17 +54,16 @@ jobs:
 
         run: python check_sheet.py
 
-      - name: Commit updated snapshot
+- name: Commit updated snapshot
+  run: |
+    git config user.name "sheet-watcher-bot"
+    git config user.email "actions@github.com"
 
-        run: |
+    git add snapshot.csv
 
-          git config user.name "sheet-watcher-bot"
+    if ! git diff --cached --quiet; then
+      git commit -m "Update sheet snapshot"
 
-          git config user.email "actions@github.com"
-
-          git add snapshot.csv
-
-          git diff --quiet --cached || git commit -m "Update sheet snapshot"
-
-          git push
-
+      git pull --rebase origin main
+      git push origin main
+    fi
