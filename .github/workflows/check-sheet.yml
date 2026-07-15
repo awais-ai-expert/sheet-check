@@ -1,4 +1,4 @@
-name: Check Google Sheet for changes
+name: Check Google Sheet for changes 
 
 on:
   schedule:
