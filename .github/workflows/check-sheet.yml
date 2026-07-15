@@ -32,20 +32,16 @@ jobs:
 
       - name: Run sheet check
         env:
-          SPREADSHEET_ID: ${{ secrets.SPREADSHEET_ID }}
-          SHEET_GID: ${{ secrets.SHEET_GID }}
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: python check_sheet.py
 
-      - name: Commit updated snapshot
+      - name: Commit updated snapshots
         run: |
           git config user.name "sheet-watcher-bot"
           git config user.email "actions@github.com"
-
-          git add snapshot.csv
-
+          git add snapshots/
           if ! git diff --cached --quiet; then
-            git commit -m "Update sheet snapshot"
+            git commit -m "Update sheet snapshots"
             git pull --rebase origin main
             git push origin HEAD:main
           fi
